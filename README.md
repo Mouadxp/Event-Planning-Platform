@@ -10,3 +10,4 @@ Admin users can manage event categories and moderate submissions
 # Group Members: 
 Mouad Elbaraka
 Adel Kandi
+Kiarash Etemad
