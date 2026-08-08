@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mouad\\herd\\Event-Planning-platform\\Event-Planning-Platform.csproj": {}
+    "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mouad\\herd\\Event-Planning-platform\\Event-Planning-Platform.csproj": {
+    "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mouad\\herd\\Event-Planning-platform\\Event-Planning-Platform.csproj",
+        "projectUniqueName": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
         "projectName": "Event-Planning-Platform",
-        "projectPath": "C:\\Users\\Mouad\\herd\\Event-Planning-platform\\Event-Planning-Platform.csproj",
+        "projectPath": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
         "packagesPath": "C:\\Users\\Mouad\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mouad\\herd\\Event-Planning-platform\\obj\\",
+        "outputPath": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
