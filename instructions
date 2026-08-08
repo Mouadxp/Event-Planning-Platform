@@ -1,0 +1,25 @@
+Event Planning Platform
+A platform where users can create, manage, and discover events in their local area.
+
+Resources: Events, Venues, Attendees
+Registered users can RSVP, view upcoming events, and create their own.
+Admin users can manage event categories and moderate submissions.
+
+Backend: Web API
+Must be built using either .NET
+Must be RESTful and database-driven, with a custom-designed schema.
+Must implement token-based authentication (e.g., JWT).
+Must include user registration, login, and logout.
+The API must expose full CRUD endpoints for at least three separate resources (excluding user and authentication endpoints).
+Certain endpoints must be protected, accessible only to authenticated users.
+All data must be persisted using a relational database of your choice (e.g., SQLite, MySQL, PostgreSQL, etc.).
+All data received from the user must be validated on the backend, and adequate error messaging must be provided when invalid data is submitted
+
+Frontend: React
+Must be built using React.
+Must be a fully responsive web application that:
+Allows user to register, log in, and log out.
+Interacts with all available API endpoints.
+Handles errors gracefully (e.g., form validation, invalid request).
+Must be branded with a custom name, logo, and use a clean, professional UI.
+Must use CSS frameworks/libraries or custom styling
