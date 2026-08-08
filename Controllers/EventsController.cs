@@ -75,40 +75,60 @@ namespace Event_Planning_Platform.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Event>> PostEvent(Event eventItem)
+        public async Task<ActionResult<EventDto>> PostEvent(EventDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(eventItem.Title))
-            {
-                return BadRequest(new { message = "Event title is required." });
-            }
-
-            if (eventItem.End <= eventItem.Start)
-            {
-                return BadRequest(new { message = "Event end time must be after start time." });
-            }
-
-            var venueExists = await _context.Venues.AnyAsync(v => v.Id == eventItem.VenueId);
+            var venueExists = await _context.Venues.AnyAsync(v => v.Id == dto.VenueId);
             if (!venueExists)
             {
                 return BadRequest(new { message = "The selected venue does not exist." });
             }
 
-            _context.Events.Add(eventItem);
+            var entity = new Event
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                Start = dto.Start,
+                End = dto.End,
+                VenueId = dto.VenueId
+            };
+
+            _context.Events.Add(entity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetEvent), new { id = eventItem.Id }, eventItem);
+            var created = await _context.Events
+                .Include(e => e.Venue)
+                .FirstOrDefaultAsync(e => e.Id == entity.Id);
+
+            var result = new EventDto
+            {
+                Id = created!.Id,
+                Title = created.Title,
+                Description = created.Description,
+                Start = created.Start,
+                End = created.End,
+                VenueId = created.VenueId,
+                Venue = created.Venue == null ? null : new VenueDto
+                {
+                    Id = created.Venue.Id,
+                    Name = created.Venue.Name,
+                    Address = created.Venue.Address,
+                    Capacity = created.Venue.Capacity
+                }
+            };
+
+            return CreatedAtAction(nameof(GetEvent), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutEvent(int id, Event eventItem)
+        public async Task<IActionResult> PutEvent(int id, EventDto dto)
         {
-            if (id != eventItem.Id)
+            if (id != dto.Id)
             {
                 return BadRequest(new { message = "Route id does not match payload id." });
             }
@@ -118,23 +138,23 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(eventItem.Title))
+            var existing = await _context.Events.FindAsync(id);
+            if (existing == null)
             {
-                return BadRequest(new { message = "Event title is required." });
+                return NotFound();
             }
 
-            if (eventItem.End <= eventItem.Start)
-            {
-                return BadRequest(new { message = "Event end time must be after start time." });
-            }
-
-            var venueExists = await _context.Venues.AnyAsync(v => v.Id == eventItem.VenueId);
+            var venueExists = await _context.Venues.AnyAsync(v => v.Id == dto.VenueId);
             if (!venueExists)
             {
                 return BadRequest(new { message = "The selected venue does not exist." });
             }
 
-            _context.Entry(eventItem).State = EntityState.Modified;
+            existing.Title = dto.Title;
+            existing.Description = dto.Description;
+            existing.Start = dto.Start;
+            existing.End = dto.End;
+            existing.VenueId = dto.VenueId;
 
             try
             {

@@ -65,6 +65,16 @@ namespace Event_Planning_Platform.Controllers
             return Ok(new { token });
         }
 
+        [HttpPost("logout")]
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            // For JWT, logout is primarily a client-side operation (discard the token).
+            // We still call SignOutAsync to clear any server-side state (if used).
+            await _signInManager.SignOutAsync();
+            return NoContent();
+        }
+
         private string GenerateJwtToken(ApplicationUser user)
         {
             var signingKey = _configuration["Jwt:Key"] ?? "development-secret-key-please-change-me";

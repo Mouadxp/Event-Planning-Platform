@@ -51,34 +51,39 @@ namespace Event_Planning_Platform.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Venue>> PostVenue(Venue venue)
+        public async Task<ActionResult<VenueDto>> PostVenue(VenueDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(venue.Name))
+            var entity = new Venue
             {
-                return BadRequest(new { message = "Venue name is required." });
-            }
+                Name = dto.Name,
+                Address = dto.Address,
+                Capacity = dto.Capacity
+            };
 
-            if (venue.Capacity <= 0)
-            {
-                return BadRequest(new { message = "Capacity must be greater than zero." });
-            }
-
-            _context.Venues.Add(venue);
+            _context.Venues.Add(entity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetVenue), new { id = venue.Id }, venue);
+            var result = new VenueDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Address = entity.Address,
+                Capacity = entity.Capacity
+            };
+
+            return CreatedAtAction(nameof(GetVenue), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutVenue(int id, Venue venue)
+        public async Task<IActionResult> PutVenue(int id, VenueDto dto)
         {
-            if (id != venue.Id)
+            if (id != dto.Id)
             {
                 return BadRequest(new { message = "Route id does not match payload id." });
             }
@@ -88,17 +93,15 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(venue.Name))
+            var existing = await _context.Venues.FindAsync(id);
+            if (existing == null)
             {
-                return BadRequest(new { message = "Venue name is required." });
+                return NotFound();
             }
 
-            if (venue.Capacity <= 0)
-            {
-                return BadRequest(new { message = "Capacity must be greater than zero." });
-            }
-
-            _context.Entry(venue).State = EntityState.Modified;
+            existing.Name = dto.Name;
+            existing.Address = dto.Address;
+            existing.Capacity = dto.Capacity;
 
             try
             {

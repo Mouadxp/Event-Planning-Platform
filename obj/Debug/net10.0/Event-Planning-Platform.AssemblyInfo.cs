@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Event-Planning-Platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47e4c40a368d432827bf7f8e175b2dc993f788f3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40a8b3ddeca70141ce9d68327066bf542b100fb7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Event-Planning-Platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Event-Planning-Platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
