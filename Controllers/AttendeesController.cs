@@ -77,35 +77,60 @@ namespace Event_Planning_Platform.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<Attendee>> PostAttendee(Attendee attendee)
+        public async Task<ActionResult<AttendeeDto>> PostAttendee(AttendeeDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(attendee.Name))
-            {
-                return BadRequest(new { message = "Attendee name is required." });
-            }
-
-            var eventExists = await _context.Events.AnyAsync(e => e.Id == attendee.EventId);
+            var eventExists = await _context.Events.AnyAsync(e => e.Id == dto.EventId);
             if (!eventExists)
             {
                 return BadRequest(new { message = "The selected event does not exist." });
             }
 
-            _context.Attendees.Add(attendee);
+            var entity = new Attendee
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                EventId = dto.EventId,
+                IsAttending = dto.IsAttending
+            };
+
+            _context.Attendees.Add(entity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAttendee), new { id = attendee.Id }, attendee);
+            var created = await _context.Attendees
+                .Include(a => a.Event)
+                .FirstOrDefaultAsync(a => a.Id == entity.Id);
+
+            var result = new AttendeeDto
+            {
+                Id = created!.Id,
+                Name = created.Name,
+                Email = created.Email,
+                EventId = created.EventId,
+                IsAttending = created.IsAttending,
+                Event = created.Event == null ? null : new EventDto
+                {
+                    Id = created.Event.Id,
+                    Title = created.Event.Title,
+                    Description = created.Event.Description,
+                    Start = created.Event.Start,
+                    End = created.Event.End,
+                    VenueId = created.Event.VenueId
+                }
+            };
+
+            return CreatedAtAction(nameof(GetAttendee), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutAttendee(int id, Attendee attendee)
+        public async Task<IActionResult> PutAttendee(int id, AttendeeDto dto)
         {
-            if (id != attendee.Id)
+            if (id != dto.Id)
             {
                 return BadRequest(new { message = "Route id does not match payload id." });
             }
@@ -115,18 +140,22 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(attendee.Name))
+            var existing = await _context.Attendees.FindAsync(id);
+            if (existing == null)
             {
-                return BadRequest(new { message = "Attendee name is required." });
+                return NotFound();
             }
 
-            var eventExists = await _context.Events.AnyAsync(e => e.Id == attendee.EventId);
+            var eventExists = await _context.Events.AnyAsync(e => e.Id == dto.EventId);
             if (!eventExists)
             {
                 return BadRequest(new { message = "The selected event does not exist." });
             }
 
-            _context.Entry(attendee).State = EntityState.Modified;
+            existing.Name = dto.Name;
+            existing.Email = dto.Email;
+            existing.EventId = dto.EventId;
+            existing.IsAttending = dto.IsAttending;
 
             try
             {

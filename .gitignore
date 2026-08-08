@@ -1,0 +1,53 @@
+# .gitignore for Event-Planning-Platform
+# Ignore build outputs, local databases, IDE and user-specific files, and temporary tools/artifacts
+
+# Build directories
+bin/
+obj/
+
+# VS and editor folders
+.vs/
+.vscode/
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+packages/
+*.nupkg
+.nuget/
+
+# Logs
+logs/
+*.log
+
+# SQLite DB files (local runtime DBs)
+*.db
+eventplanning.db
+
+# Tokens and temporary credentials
+tokens/
+*.key
+.env
+secrets.json
+appsettings.Development.json
+
+# Tools build artifacts
+tools/**/bin/
+tools/**/obj/
+tools/**/eventplanning.db
+
+# Test build outputs
+tests/**/bin/
+tests/**/obj/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Generated files
+*_Generated*.cs
