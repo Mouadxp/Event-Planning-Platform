@@ -1,5 +1,6 @@
 using Event_Planning_Platform.Data;
 using Event_Planning_Platform.Models;
+using Event_Planning_Platform.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +19,33 @@ namespace Event_Planning_Platform.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Attendee>>> GetAttendees()
+        public async Task<ActionResult<IEnumerable<AttendeeDto>>> GetAttendees()
         {
-            return await _context.Attendees
+            var attendees = await _context.Attendees
                 .Include(a => a.Event)
                 .ToListAsync();
+
+            return attendees.Select(a => new AttendeeDto
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Email = a.Email,
+                EventId = a.EventId,
+                IsAttending = a.IsAttending,
+                Event = a.Event == null ? null : new EventDto
+                {
+                    Id = a.Event.Id,
+                    Title = a.Event.Title,
+                    Description = a.Event.Description,
+                    Start = a.Event.Start,
+                    End = a.Event.End,
+                    VenueId = a.Event.VenueId
+                }
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Attendee>> GetAttendee(int id)
+        public async Task<ActionResult<AttendeeDto>> GetAttendee(int id)
         {
             var attendee = await _context.Attendees
                 .Include(a => a.Event)
@@ -37,7 +56,23 @@ namespace Event_Planning_Platform.Controllers
                 return NotFound();
             }
 
-            return attendee;
+            return new AttendeeDto
+            {
+                Id = attendee.Id,
+                Name = attendee.Name,
+                Email = attendee.Email,
+                EventId = attendee.EventId,
+                IsAttending = attendee.IsAttending,
+                Event = attendee.Event == null ? null : new EventDto
+                {
+                    Id = attendee.Event.Id,
+                    Title = attendee.Event.Title,
+                    Description = attendee.Event.Description,
+                    Start = attendee.Event.Start,
+                    End = attendee.Event.End,
+                    VenueId = attendee.Event.VenueId
+                }
+            };
         }
 
         [HttpPost]

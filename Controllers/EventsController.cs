@@ -1,5 +1,6 @@
 using Event_Planning_Platform.Data;
 using Event_Planning_Platform.Models;
+using Event_Planning_Platform.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,20 +19,35 @@ namespace Event_Planning_Platform.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
         {
-            return await _context.Events
+            var events = await _context.Events
                 .Include(e => e.Venue)
-                .Include(e => e.Attendees)
                 .ToListAsync();
+
+            return events.Select(e => new EventDto
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                Start = e.Start,
+                End = e.End,
+                VenueId = e.VenueId,
+                Venue = e.Venue == null ? null : new VenueDto
+                {
+                    Id = e.Venue.Id,
+                    Name = e.Venue.Name,
+                    Address = e.Venue.Address,
+                    Capacity = e.Venue.Capacity
+                }
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetEvent(int id)
+        public async Task<ActionResult<EventDto>> GetEvent(int id)
         {
             var eventItem = await _context.Events
                 .Include(e => e.Venue)
-                .Include(e => e.Attendees)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (eventItem == null)
@@ -39,7 +55,22 @@ namespace Event_Planning_Platform.Controllers
                 return NotFound();
             }
 
-            return eventItem;
+            return new EventDto
+            {
+                Id = eventItem.Id,
+                Title = eventItem.Title,
+                Description = eventItem.Description,
+                Start = eventItem.Start,
+                End = eventItem.End,
+                VenueId = eventItem.VenueId,
+                Venue = eventItem.Venue == null ? null : new VenueDto
+                {
+                    Id = eventItem.Venue.Id,
+                    Name = eventItem.Venue.Name,
+                    Address = eventItem.Venue.Address,
+                    Capacity = eventItem.Venue.Capacity
+                }
+            };
         }
 
         [HttpPost]

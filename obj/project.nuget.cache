@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZSILGSRIViM=",
+  "dgSpecHash": "hXkuxcqDjYU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
+  "projectFilePath": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mouad\\.nuget\\packages\\fluentvalidation\\11.2.0\\fluentvalidation.11.2.0.nupkg.sha512",
     "C:\\Users\\Mouad\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.2.0\\fluentvalidation.aspnetcore.11.2.0.nupkg.sha512",
@@ -61,9 +61,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'SQLitePCLRaw.lib.e_sqlite3' 2.1.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-2m69-gcr7-jv3q",
-      "projectPath": "C:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
+      "projectPath": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
+      "filePath": "c:\\Users\\Mouad\\Herd\\Event-Planning-Platform\\Event-Planning-Platform.csproj",
       "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
       "targetGraphs": [
         "net10.0"
