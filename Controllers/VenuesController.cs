@@ -1,5 +1,6 @@
 using Event_Planning_Platform.Data;
 using Event_Planning_Platform.Models;
+using Event_Planning_Platform.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,21 +19,34 @@ namespace Event_Planning_Platform.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Venue>>> GetVenues()
+        public async Task<ActionResult<IEnumerable<VenueDto>>> GetVenues()
         {
-            return await _context.Venues.Include(v => v.Events).ToListAsync();
+            var venues = await _context.Venues.ToListAsync();
+            return venues.Select(v => new VenueDto
+            {
+                Id = v.Id,
+                Name = v.Name,
+                Address = v.Address,
+                Capacity = v.Capacity
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Venue>> GetVenue(int id)
+        public async Task<ActionResult<VenueDto>> GetVenue(int id)
         {
-            var venue = await _context.Venues.Include(v => v.Events).FirstOrDefaultAsync(v => v.Id == id);
+            var venue = await _context.Venues.FirstOrDefaultAsync(v => v.Id == id);
             if (venue == null)
             {
                 return NotFound();
             }
 
-            return venue;
+            return new VenueDto
+            {
+                Id = venue.Id,
+                Name = venue.Name,
+                Address = venue.Address,
+                Capacity = venue.Capacity
+            };
         }
 
         [HttpPost]
