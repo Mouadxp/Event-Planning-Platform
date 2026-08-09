@@ -104,7 +104,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Attendees");
+                    b.ToTable("Attendees", (string)null);
 
                     b.HasData(
                         new
@@ -159,7 +159,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
 
                     b.HasData(
                         new
@@ -200,7 +200,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Venues");
+                    b.ToTable("Venues", (string)null);
 
                     b.HasData(
                         new
