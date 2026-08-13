@@ -20,6 +20,26 @@ export default function EventsPage() {
   const [error, setError] = useState('')
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [deletingEventId, setDeletingEventId] = useState(null)
+  const [categoryFilter, setCategoryFilter] = useState([])
+  const [categories, setCategories] = useState([])
+
+  const loadCategories = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try
+    {
+      const data = await api.getCategories()
+      setCategories(data)
+    }
+    catch (err)
+    {
+      setError(err.message || 'Failed to load categories.')
+    }
+    finally
+    {
+      setLoading(false)
+    }
+  }, [])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -36,6 +56,7 @@ export default function EventsPage() {
   }, [])
 
   useEffect(() => { load() }, [load])
+  useEffect(() => { loadCategories() }, [loadCategories])
 
   // Find the current user's RSVP for a given event (matched by email)
   function myRsvp(eventId) {
@@ -71,11 +92,22 @@ export default function EventsPage() {
 
   return (
     <div className="events-page">
+      <div style={{display: "flex", justifyContent: "flex-end"}}>
+        <label className="events-filter-label" style={{marginRight: "10px"}}>Filter by category: </label>
+      <select className="events-filter" onChange={(e) => setCategoryFilter(e.target.value.split())}>
+          {
+            categories
+              .sort()
+              .map((c) => <option key={c.name}>{c.name}</option>)}
+        </select>
+        </div>
       <div className="events-header">
         <div>
           <h1 className="events-title">Upcoming Events</h1>
           <p className="events-subtitle">Browse events and let us know if you&apos;ll be there.</p>
         </div>
+        
+
       </div>
 
       {loading && <div className="events-state">Loading events…</div>}
@@ -87,7 +119,7 @@ export default function EventsPage() {
 
       {!loading && !error && events.length > 0 && (
         <ul className="events-grid">
-          {events.map((event) => {
+          {events.filter((e) => !categoryFilter.length || categoryFilter == (e.category)).map((event) => {
             const label = rsvpLabel(event.id)
             return (
               <li key={event.id} className="event-card">
