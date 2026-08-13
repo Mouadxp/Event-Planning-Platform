@@ -58,6 +58,17 @@
   gap: 20px;
 }
 
+.events-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 0 0 20px;
+  justify-content: flex-end;
+
+  
+  
+}
+
 .event-card {
   border: 1px solid var(--border);
   border-radius: 12px;
