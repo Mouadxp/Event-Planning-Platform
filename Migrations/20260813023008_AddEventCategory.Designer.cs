@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Event_Planning_Platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260808171639_SeedData")]
-    partial class SeedData
+    [Migration("20260813023008_AddEventCategory")]
+    partial class AddEventCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("Event_Planning_Platform.Models.ApplicationUser", b =>
                 {
@@ -108,32 +108,6 @@ namespace Event_Planning_Platform.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Attendees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "alice@example.com",
-                            EventId = 1,
-                            IsAttending = true,
-                            Name = "Alice Johnson"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "bob@example.com",
-                            EventId = 1,
-                            IsAttending = true,
-                            Name = "Bob Smith"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "catherine@example.com",
-                            EventId = 2,
-                            IsAttending = true,
-                            Name = "Catherine Lee"
-                        });
                 });
 
             modelBuilder.Entity("Event_Planning_Platform.Models.Event", b =>
@@ -141,6 +115,9 @@ namespace Event_Planning_Platform.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -163,26 +140,6 @@ namespace Event_Planning_Platform.Migrations
                     b.HasIndex("VenueId");
 
                     b.ToTable("Events");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "A social meetup for local professionals",
-                            End = new DateTime(2026, 5, 20, 21, 0, 0, 0, DateTimeKind.Unspecified),
-                            Start = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Spring Networking Mixer",
-                            VenueId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Local artists and food vendors",
-                            End = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            Start = new DateTime(2026, 6, 10, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Community Art Fair",
-                            VenueId = 2
-                        });
                 });
 
             modelBuilder.Entity("Event_Planning_Platform.Models.Venue", b =>
@@ -204,22 +161,6 @@ namespace Event_Planning_Platform.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Venues");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 Main St",
-                            Capacity = 200,
-                            Name = "Grand Hall"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "456 River Rd",
-                            Capacity = 120,
-                            Name = "River Loft"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

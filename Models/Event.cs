@@ -10,6 +10,8 @@ namespace Event_Planning_Platform.Models
         [Required]
         public string Title { get; set; } = string.Empty;
 
+        public string? Category { get; set; }
+
         public string? Description { get; set; }
 
         public DateTime Start { get; set; }
