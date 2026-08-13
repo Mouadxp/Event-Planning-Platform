@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { AuthProvider } from './components/AuthProvider'
+import { useState } from 'react'
 import AdminRoute from './components/AdminRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
@@ -12,6 +13,7 @@ import AdminCategoriesPage from './pages/AdminCategoriesPage'
 import './App.css'
 
 function LandingPage() {
+  const [user, setUser] = useState(() => localStorage.getItem('token') ? true : false)
   return (
     <section className="landing-page">
       <p className="badge">Event Planning Platform</p>
@@ -20,29 +22,17 @@ function LandingPage() {
         Built around your backend resources: <strong>Events</strong>, <strong>Venues</strong>, and <strong>Attendees</strong>.
       </p>
 
-      <div className="cta-group">
+      <div className="cta-group" >
+        {user && <Link to="/events" className="btn btn-primary">View Events</Link>}
+        {!user && 
+        <>
         <Link to="/register" className="btn btn-primary">Get Started</Link>
         <Link to="/login" className="btn btn-secondary">Login</Link>
+        </>
+        }
+        
       </div>
 
-      <div className="feature-grid">
-        <article className="feature-card">
-          <h2>For registered users</h2>
-          <ul>
-            <li>RSVP to upcoming events</li>
-            <li>View local events</li>
-            <li>Create your own events</li>
-          </ul>
-        </article>
-        <article className="feature-card">
-          <h2>For admins</h2>
-          <ul>
-            <li>Manage event categories</li>
-            <li>Moderate submissions</li>
-            <li>Keep event quality high</li>
-          </ul>
-        </article>
-      </div>
     </section>
   )
 }

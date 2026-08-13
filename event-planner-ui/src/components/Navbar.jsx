@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">🗓 Event Planner</Link>
+      <Link to="/" className="navbar-brand">Meetdown</Link>
       <div className="navbar-links">
         {user ? (
           <>
