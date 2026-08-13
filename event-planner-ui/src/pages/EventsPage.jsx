@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import { useAuth } from '../components/AuthProvider'
 import RsvpModal from '../components/RsvpModal'
@@ -57,7 +56,6 @@ export default function EventsPage() {
           <h1 className="events-title">Upcoming Events</h1>
           <p className="events-subtitle">Browse events and let us know if you&apos;ll be there.</p>
         </div>
-        <Link to="/events/create" className="events-create-btn">+ Create event</Link>
       </div>
 
       {loading && <div className="events-state">Loading events…</div>}
