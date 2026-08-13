@@ -32,6 +32,11 @@ export const api = {
   // Events
   getEvents: () => request('/events'),
   getEvent: (id) => request(`/events/${id}`),
+  createEvent: (data) => request('/events', { method: 'POST', body: JSON.stringify(data) }),
+
+  // Venues
+  getVenues: () => request('/venues'),
+  createVenue: (data) => request('/venues', { method: 'POST', body: JSON.stringify(data) }),
 
   // Attendees / RSVP
   getAttendees: () => request('/attendees'),
