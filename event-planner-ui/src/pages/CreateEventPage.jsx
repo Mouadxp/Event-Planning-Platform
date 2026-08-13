@@ -28,18 +28,19 @@ export default function CreateEventPage() {
     e.preventDefault()
     setError('')
 
-    if (end && start && new Date(end) <= new Date(start)) {
+    if (end && start && end < start) {
       setError('End date/time must be after the start date/time.')
       return
     }
 
     setLoading(true)
     try {
+      const toISO = (dateStr) => new Date(`${dateStr}T00:00:00`).toISOString()
       await api.createEvent({
         title,
         description,
-        start: new Date(start).toISOString(),
-        end: end ? new Date(end).toISOString() : new Date(start).toISOString(),
+        start: toISO(start),
+        end: end ? toISO(end) : toISO(start),
         venueId: Number(venueId),
       })
       navigate('/events')
@@ -90,7 +91,7 @@ export default function CreateEventPage() {
               <label htmlFor="start">Start <span className="required">*</span></label>
               <input
                 id="start"
-                type="datetime-local"
+                type="date"
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
                 required
@@ -101,7 +102,7 @@ export default function CreateEventPage() {
               <label htmlFor="end">End</label>
               <input
                 id="end"
-                type="datetime-local"
+                type="date"
                 value={end}
                 onChange={(e) => setEnd(e.target.value)}
                 min={start}
