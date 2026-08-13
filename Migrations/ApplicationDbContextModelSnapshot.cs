@@ -104,33 +104,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Attendees", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "alice@example.com",
-                            EventId = 1,
-                            IsAttending = true,
-                            Name = "Alice Johnson"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "bob@example.com",
-                            EventId = 1,
-                            IsAttending = true,
-                            Name = "Bob Smith"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "catherine@example.com",
-                            EventId = 2,
-                            IsAttending = true,
-                            Name = "Catherine Lee"
-                        });
+                    b.ToTable("Attendees");
                 });
 
             modelBuilder.Entity("Event_Planning_Platform.Models.Event", b =>
@@ -159,27 +133,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Events", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "A social meetup for local professionals",
-                            End = new DateTime(2026, 5, 20, 21, 0, 0, 0, DateTimeKind.Unspecified),
-                            Start = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Spring Networking Mixer",
-                            VenueId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Local artists and food vendors",
-                            End = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            Start = new DateTime(2026, 6, 10, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Community Art Fair",
-                            VenueId = 2
-                        });
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Event_Planning_Platform.Models.Venue", b =>
@@ -200,23 +154,7 @@ namespace Event_Planning_Platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Venues", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 Main St",
-                            Capacity = 200,
-                            Name = "Grand Hall"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "456 River Rd",
-                            Capacity = 120,
-                            Name = "River Loft"
-                        });
+                    b.ToTable("Venues");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
