@@ -1,3 +1,9 @@
+:root {
+  --accent : #ff3e00;
+  --accent-bg: rgba(255, 62, 0, 0.1);
+  --accent-border: rgba(255, 62, 0, 0.3);
+}
+
 .auth-page {
   display: flex;
   align-items: center;

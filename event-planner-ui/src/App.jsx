@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import EventsPage from './pages/EventsPage'
+import CreateEventPage from './pages/CreateEventPage'
 import './App.css'
 
 function LandingPage() {
@@ -54,6 +55,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/events" element={<EventsPage />} />
+            <Route path="/events/create" element={<CreateEventPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

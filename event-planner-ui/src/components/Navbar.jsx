@@ -18,6 +18,7 @@ export default function Navbar() {
         {user ? (
           <>
             <Link to="/events">Events</Link>
+            <Link to="/events/create" className="navbar-cta">+ Create event</Link>
             <span className="navbar-user">{user.email}</span>
             <button className="navbar-logout" onClick={handleLogout}>Log out</button>
           </>
