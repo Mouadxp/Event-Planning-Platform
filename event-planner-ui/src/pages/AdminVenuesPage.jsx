@@ -62,13 +62,9 @@ export default function AdminVenuesPage() {
     <div className="admin-page">
       <div className="admin-header">
         <div>
-          <p className="admin-badge">Admin</p>
           <h1 className="admin-title">Manage Venues</h1>
           <p className="admin-subtitle">Add new venues that can be assigned to events.</p>
         </div>
-        <button className="admin-back-btn" onClick={() => navigate('/events')}>
-          ← Back to Events
-        </button>
       </div>
 
       <div className="admin-layout">

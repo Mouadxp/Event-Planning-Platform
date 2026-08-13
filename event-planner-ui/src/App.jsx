@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { AuthProvider } from './components/AuthProvider'
+import AdminRoute from './components/AdminRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
@@ -7,6 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import EventsPage from './pages/EventsPage'
 import CreateEventPage from './pages/CreateEventPage'
 import AdminVenuesPage from './pages/AdminVenuesPage'
+import AdminCategoriesPage from './pages/AdminCategoriesPage'
 import './App.css'
 
 function LandingPage() {
@@ -59,6 +61,9 @@ function App() {
             <Route path="/events/create" element={<CreateEventPage />} />
             <Route path="/admin/venues" element={<AdminVenuesPage />} />
           </Route>
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
@@ -67,4 +72,3 @@ function App() {
 }
 
 export default App
-

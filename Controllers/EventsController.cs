@@ -29,6 +29,7 @@ namespace Event_Planning_Platform.Controllers
             {
                 Id = e.Id,
                 Title = e.Title,
+                Category = e.Category,
                 Description = e.Description,
                 Start = e.Start,
                 End = e.End,
@@ -59,6 +60,7 @@ namespace Event_Planning_Platform.Controllers
             {
                 Id = eventItem.Id,
                 Title = eventItem.Title,
+                Category = eventItem.Category,
                 Description = eventItem.Description,
                 Start = eventItem.Start,
                 End = eventItem.End,
@@ -82,15 +84,29 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var categoryName = dto.Category?.Trim();
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                return BadRequest(new { message = "A category must be selected." });
+            }
+
             var venueExists = await _context.Venues.AnyAsync(v => v.Id == dto.VenueId);
             if (!venueExists)
             {
                 return BadRequest(new { message = "The selected venue does not exist." });
             }
 
+            var categoryExists = await _context.EventCategories
+                .AnyAsync(c => c.Name == categoryName);
+            if (!categoryExists)
+            {
+                return BadRequest(new { message = "The selected category does not exist." });
+            }
+
             var entity = new Event
             {
                 Title = dto.Title,
+                Category = categoryName,
                 Description = dto.Description,
                 Start = dto.Start,
                 End = dto.End,
@@ -108,6 +124,7 @@ namespace Event_Planning_Platform.Controllers
             {
                 Id = created!.Id,
                 Title = created.Title,
+                Category = created.Category,
                 Description = created.Description,
                 Start = created.Start,
                 End = created.End,
@@ -138,6 +155,12 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var categoryName = dto.Category?.Trim();
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                return BadRequest(new { message = "A category must be selected." });
+            }
+
             var existing = await _context.Events.FindAsync(id);
             if (existing == null)
             {
@@ -150,7 +173,15 @@ namespace Event_Planning_Platform.Controllers
                 return BadRequest(new { message = "The selected venue does not exist." });
             }
 
+            var categoryExists = await _context.EventCategories
+                .AnyAsync(c => c.Name == categoryName);
+            if (!categoryExists)
+            {
+                return BadRequest(new { message = "The selected category does not exist." });
+            }
+
             existing.Title = dto.Title;
+            existing.Category = categoryName;
             existing.Description = dto.Description;
             existing.Start = dto.Start;
             existing.End = dto.End;

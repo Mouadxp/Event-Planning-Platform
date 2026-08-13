@@ -9,7 +9,7 @@
 .events-header {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 36px;
   gap: 16px;
 
@@ -164,5 +164,31 @@
 
   &:hover {
     opacity: 0.85;
+  }
+}
+
+.event-delete-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+    background: rgba(239, 68, 68, 0.16);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #fca5a5;
   }
 }

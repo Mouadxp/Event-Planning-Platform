@@ -33,6 +33,13 @@ export const api = {
   getEvents: () => request('/events'),
   getEvent: (id) => request(`/events/${id}`),
   createEvent: (data) => request('/events', { method: 'POST', body: JSON.stringify(data) }),
+  deleteEvent: (id) => request(`/events/${id}`, { method: 'DELETE' }),
+
+  // Event categories
+  getCategories: () => request('/eventcategories'),
+  createCategory: (data) => request('/eventcategories', { method: 'POST', body: JSON.stringify(data) }),
+  updateCategory: (id, data) => request(`/eventcategories/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteCategory: (id) => request(`/eventcategories/${id}`, { method: 'DELETE' }),
 
   // Venues
   getVenues: () => request('/venues'),

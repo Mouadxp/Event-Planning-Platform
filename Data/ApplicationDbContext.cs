@@ -11,6 +11,7 @@ namespace Event_Planning_Platform.Data
         }
 
         public DbSet<Event> Events { get; set; } = null!;
+        public DbSet<EventCategory> EventCategories { get; set; } = null!;
         public DbSet<Venue> Venues { get; set; } = null!;
         public DbSet<Attendee> Attendees { get; set; } = null!;
     }

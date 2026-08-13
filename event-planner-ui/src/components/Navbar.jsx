@@ -20,6 +20,7 @@ export default function Navbar() {
             <Link to="/events">Events</Link>
             <Link to="/events/create" className="navbar-cta">+ Create event</Link>
             <Link to="/admin/venues">Venues</Link>
+            {user.isAdmin && <Link to="/admin/categories">Categories</Link>}
             <span className="navbar-user">{user.email}</span>
             <button className="navbar-logout" onClick={handleLogout}>Log out</button>
           </>

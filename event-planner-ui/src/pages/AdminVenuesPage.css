@@ -9,7 +9,7 @@
 .admin-header {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   margin-bottom: 36px;
 
@@ -225,4 +225,11 @@
   gap: 12px;
   font-size: 13px;
   color: var(--text);
+}
+
+.category-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }

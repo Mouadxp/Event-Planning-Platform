@@ -19,6 +19,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const [deletingEventId, setDeletingEventId] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -49,6 +50,25 @@ export default function EventsPage() {
     return rsvp.isAttending ? 'Attending ✓' : 'Not attending'
   }
 
+  async function handleDeleteEvent(eventId, eventTitle) {
+    const confirmed = window.confirm(`Delete "${eventTitle}"?`)
+    if (!confirmed) {
+      return
+    }
+
+    setError('')
+    setDeletingEventId(eventId)
+
+    try {
+      await api.deleteEvent(eventId)
+      await load()
+    } catch (err) {
+      setError(err.message || 'Failed to delete event.')
+    } finally {
+      setDeletingEventId(null)
+    }
+  }
+
   return (
     <div className="events-page">
       <div className="events-header">
@@ -73,6 +93,12 @@ export default function EventsPage() {
               <li key={event.id} className="event-card">
                 <div className="event-card-body">
                   <h2 className="event-name">{event.title}</h2>
+                  {event.category && (
+                    <div className="event-meta-row">
+                      <span className="event-meta-icon">🏷</span>
+                      <span>{event.category}</span>
+                    </div>
+                  )}
                   {event.description && (
                     <p className="event-description">{event.description}</p>
                   )}
@@ -101,7 +127,18 @@ export default function EventsPage() {
                       {label}
                     </span>
                   )}
+                  {user?.isAdmin && (
+                    <button
+                      type="button"
+                      className="event-delete-btn"
+                      onClick={() => handleDeleteEvent(event.id, event.title)}
+                      disabled={deletingEventId === event.id}
+                    >
+                      {deletingEventId === event.id ? 'Deleting…' : 'Delete'}
+                    </button>
+                  )}
                   <button
+                    type="button"
                     className="rsvp-btn"
                     onClick={() => setSelectedEvent(event)}
                   >

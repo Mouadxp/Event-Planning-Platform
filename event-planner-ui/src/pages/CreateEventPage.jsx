@@ -7,21 +7,30 @@ export default function CreateEventPage() {
   const navigate = useNavigate()
 
   const [title, setTitle] = useState('')
+  const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
   const [venueId, setVenueId] = useState('')
 
+  const [categories, setCategories] = useState([])
+  const [categoriesLoading, setCategoriesLoading] = useState(true)
   const [venues, setVenues] = useState([])
   const [venuesLoading, setVenuesLoading] = useState(true)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    api.getVenues()
-      .then(setVenues)
-      .catch(() => setError('Failed to load venues.'))
-      .finally(() => setVenuesLoading(false))
+    Promise.all([api.getCategories(), api.getVenues()])
+      .then(([categoryData, venueData]) => {
+        setCategories(categoryData)
+        setVenues(venueData)
+      })
+      .catch(() => setError('Failed to load categories or venues.'))
+      .finally(() => {
+        setCategoriesLoading(false)
+        setVenuesLoading(false)
+      })
   }, [])
 
   async function handleSubmit(e) {
@@ -38,6 +47,7 @@ export default function CreateEventPage() {
       const toISO = (dateStr) => new Date(`${dateStr}T00:00:00`).toISOString()
       await api.createEvent({
         title,
+        category,
         description,
         start: toISO(start),
         end: end ? toISO(end) : toISO(start),
@@ -73,6 +83,27 @@ export default function CreateEventPage() {
               placeholder="e.g. Summer Networking Mixer"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="category">Category <span className="required">*</span></label>
+            {categoriesLoading ? (
+              <p className="venues-loading">Loading categories…</p>
+            ) : (
+              <select
+                id="category"
+              value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                required
+              >
+                <option value="" disabled>Select a category</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div className="form-group">
@@ -142,7 +173,7 @@ export default function CreateEventPage() {
             <button
               type="submit"
               className="btn-submit"
-              disabled={loading || venuesLoading}
+              disabled={loading || venuesLoading || categoriesLoading}
             >
               {loading ? 'Creating…' : 'Create event'}
             </button>
