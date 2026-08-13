@@ -36,6 +36,7 @@ export const api = {
 
   // Venues
   getVenues: () => request('/venues'),
+  createVenue: (data) => request('/venues', { method: 'POST', body: JSON.stringify(data) }),
 
   // Attendees / RSVP
   getAttendees: () => request('/attendees'),

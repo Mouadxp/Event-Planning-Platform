@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import EventsPage from './pages/EventsPage'
 import CreateEventPage from './pages/CreateEventPage'
+import AdminVenuesPage from './pages/AdminVenuesPage'
 import './App.css'
 
 function LandingPage() {
@@ -56,6 +57,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/create" element={<CreateEventPage />} />
+            <Route path="/admin/venues" element={<AdminVenuesPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
