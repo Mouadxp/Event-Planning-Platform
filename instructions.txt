@@ -6,7 +6,7 @@ Registered users can RSVP, view upcoming events, and create their own.
 Admin users can manage event categories and moderate submissions.
 
 Backend: Web API
-Must be built using either .NET
+Must be built using .NET
 Must be RESTful and database-driven, with a custom-designed schema.
 Must implement token-based authentication (e.g., JWT).
 Must include user registration, login, and logout.

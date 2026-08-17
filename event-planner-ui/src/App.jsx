@@ -18,10 +18,6 @@ function LandingPage() {
     <section className="landing-page">
       <p className="badge">Event Planning Platform</p>
       <h1>Create, discover, and manage events in your local area</h1>
-      <p className="lead">
-        Built around your backend resources: <strong>Events</strong>, <strong>Venues</strong>, and <strong>Attendees</strong>.
-      </p>
-
       <div className="cta-group" >
         {user && <Link to="/events" className="btn btn-primary">View Events</Link>}
         {!user && 
