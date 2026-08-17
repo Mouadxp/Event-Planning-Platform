@@ -217,6 +217,7 @@
   color: var(--text-h);
   font-size: 15px;
   margin-bottom: 4px;
+  text-align: left;
 }
 
 .venue-item-meta {

@@ -150,17 +150,17 @@ export default function AdminCategoriesPage() {
                   ) : (
                     <>
                       <div className="venue-item-name">{category.name}</div>
-                      <div className="category-actions">
+                      <div className="venue-actions">
                         <button
                           type="button"
-                          className="admin-back-btn"
+                          className="venue-edit-btn"
                           onClick={() => { setEditingId(category.id); setEditingName(category.name) }}
                         >
-                          Rename
+                          Edit
                         </button>
                         <button
                           type="button"
-                          className="admin-back-btn"
+                          className="venue-delete-btn"
                           onClick={() => handleDelete(category)}
                         >
                           Delete
