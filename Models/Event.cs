@@ -24,5 +24,7 @@ namespace Event_Planning_Platform.Models
 
         [JsonIgnore]
         public List<Attendee> Attendees { get; set; } = new();
+
+        public string? CreatedBy { get; set; }
     }
 }

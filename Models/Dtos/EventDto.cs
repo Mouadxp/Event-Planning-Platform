@@ -10,5 +10,6 @@ namespace Event_Planning_Platform.Models.Dtos
         public DateTime End { get; set; }
         public int VenueId { get; set; }
         public VenueDto? Venue { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

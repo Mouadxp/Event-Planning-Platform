@@ -227,6 +227,48 @@
   color: var(--text);
 }
 
+.venue-delete-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.88;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: #ef4444;
+  }
+}
+
+.venue-edit-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.88;
+  }
+}
+
+.venue-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .category-actions {
   display: flex;
   flex-wrap: wrap;

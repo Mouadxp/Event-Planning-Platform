@@ -3,6 +3,7 @@ using Event_Planning_Platform.Models;
 using Event_Planning_Platform.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Planning_Platform.Controllers
@@ -12,10 +13,12 @@ namespace Event_Planning_Platform.Controllers
     public class EventsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EventsController(ApplicationDbContext context)
+        public EventsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -40,7 +43,8 @@ namespace Event_Planning_Platform.Controllers
                     Name = e.Venue.Name,
                     Address = e.Venue.Address,
                     Capacity = e.Venue.Capacity
-                }
+                },
+                CreatedBy = e.CreatedBy
             }).ToList();
         }
 
@@ -71,7 +75,8 @@ namespace Event_Planning_Platform.Controllers
                     Name = eventItem.Venue.Name,
                     Address = eventItem.Venue.Address,
                     Capacity = eventItem.Venue.Capacity
-                }
+                },
+                CreatedBy = eventItem.CreatedBy
             };
         }
 
@@ -103,6 +108,7 @@ namespace Event_Planning_Platform.Controllers
                 return BadRequest(new { message = "The selected category does not exist." });
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var entity = new Event
             {
                 Title = dto.Title,
@@ -110,7 +116,8 @@ namespace Event_Planning_Platform.Controllers
                 Description = dto.Description,
                 Start = dto.Start,
                 End = dto.End,
-                VenueId = dto.VenueId
+                VenueId = dto.VenueId,
+                CreatedBy = user?.Email
             };
 
             _context.Events.Add(entity);
@@ -135,7 +142,8 @@ namespace Event_Planning_Platform.Controllers
                     Name = created.Venue.Name,
                     Address = created.Venue.Address,
                     Capacity = created.Venue.Capacity
-                }
+                },
+                CreatedBy = created.CreatedBy
             };
 
             return CreatedAtAction(nameof(GetEvent), new { id = result.Id }, result);
@@ -165,6 +173,15 @@ namespace Event_Planning_Platform.Controllers
             if (existing == null)
             {
                 return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(user!);
+            var isAdmin = userRoles.Contains("Admin");
+
+            if (!isAdmin && existing.CreatedBy != user?.Email)
+            {
+                return Forbid();
             }
 
             var venueExists = await _context.Venues.AnyAsync(v => v.Id == dto.VenueId);
@@ -212,6 +229,15 @@ namespace Event_Planning_Platform.Controllers
             if (eventItem == null)
             {
                 return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(user!);
+            var isAdmin = userRoles.Contains("Admin");
+
+            if (!isAdmin && eventItem.CreatedBy != user?.Email)
+            {
+                return Forbid();
             }
 
             _context.Events.Remove(eventItem);
