@@ -8,7 +8,9 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import EventsPage from './pages/EventsPage'
 import CreateEventPage from './pages/CreateEventPage'
+import EditEventPage from './pages/EditEventPage'
 import AdminVenuesPage from './pages/AdminVenuesPage'
+import EditVenuePage from './pages/EditVenuePage'
 import AdminCategoriesPage from './pages/AdminCategoriesPage'
 import './App.css'
 
@@ -45,7 +47,9 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/create" element={<CreateEventPage />} />
+            <Route path="/events/:id/edit" element={<EditEventPage />} />
             <Route path="/admin/venues" element={<AdminVenuesPage />} />
+            <Route path="/admin/venues/:id/edit" element={<EditVenuePage />} />
           </Route>
           <Route element={<AdminRoute />}>
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />

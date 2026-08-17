@@ -1,10 +1,12 @@
 ﻿import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
+import { useAuth } from '../components/AuthProvider'
 import './AdminVenuesPage.css'
 
 export default function AdminVenuesPage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   // Existing venues list
   const [venues, setVenues] = useState([])
@@ -56,6 +58,22 @@ export default function AdminVenuesPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  async function handleDeleteVenue(id, name) {
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return
+
+    try {
+      await api.deleteVenue(id)
+      loadVenues()
+    } catch (err) {
+      const message = err.body?.message || err.message || 'Failed to delete venue.'
+      alert(message)
+    }
+  }
+
+  function canEditVenue(venue) {
+    return user?.isAdmin || venue.createdBy === user?.email
   }
 
   return (
@@ -137,6 +155,24 @@ export default function AdminVenuesPage() {
                     {v.address && <span>📍 {v.address}</span>}
                     {v.capacity > 0 && <span>👥 Capacity: {v.capacity}</span>}
                   </div>
+                  {canEditVenue(v) && (
+                    <div className="venue-actions">
+                      <button
+                        className="venue-edit-btn"
+                        onClick={() => navigate(`/admin/venues/${v.id}/edit`)}
+                        aria-label={`Edit ${v.name}`}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="venue-delete-btn"
+                        onClick={() => handleDeleteVenue(v.id, v.name)}
+                        aria-label={`Delete ${v.name}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

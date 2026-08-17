@@ -3,6 +3,7 @@ using Event_Planning_Platform.Models;
 using Event_Planning_Platform.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Planning_Platform.Controllers
@@ -12,10 +13,12 @@ namespace Event_Planning_Platform.Controllers
     public class VenuesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public VenuesController(ApplicationDbContext context)
+        public VenuesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -27,7 +30,8 @@ namespace Event_Planning_Platform.Controllers
                 Id = v.Id,
                 Name = v.Name,
                 Address = v.Address,
-                Capacity = v.Capacity
+                Capacity = v.Capacity,
+                CreatedBy = v.CreatedBy
             }).ToList();
         }
 
@@ -45,7 +49,8 @@ namespace Event_Planning_Platform.Controllers
                 Id = venue.Id,
                 Name = venue.Name,
                 Address = venue.Address,
-                Capacity = venue.Capacity
+                Capacity = venue.Capacity,
+                CreatedBy = venue.CreatedBy
             };
         }
 
@@ -58,11 +63,13 @@ namespace Event_Planning_Platform.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var entity = new Venue
             {
                 Name = dto.Name,
                 Address = dto.Address,
-                Capacity = dto.Capacity
+                Capacity = dto.Capacity,
+                CreatedBy = user?.Email
             };
 
             _context.Venues.Add(entity);
@@ -73,7 +80,8 @@ namespace Event_Planning_Platform.Controllers
                 Id = entity.Id,
                 Name = entity.Name,
                 Address = entity.Address,
-                Capacity = entity.Capacity
+                Capacity = entity.Capacity,
+                CreatedBy = entity.CreatedBy
             };
 
             return CreatedAtAction(nameof(GetVenue), new { id = result.Id }, result);
@@ -97,6 +105,15 @@ namespace Event_Planning_Platform.Controllers
             if (existing == null)
             {
                 return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(user!);
+            var isAdmin = userRoles.Contains("Admin");
+
+            if (!isAdmin && existing.CreatedBy != user?.Email)
+            {
+                return Forbid();
             }
 
             existing.Name = dto.Name;
@@ -128,6 +145,15 @@ namespace Event_Planning_Platform.Controllers
             if (venue == null)
             {
                 return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(user!);
+            var isAdmin = userRoles.Contains("Admin");
+
+            if (!isAdmin && venue.CreatedBy != user?.Email)
+            {
+                return Forbid();
             }
 
             var hasEvents = await _context.Events.AnyAsync(e => e.VenueId == id);

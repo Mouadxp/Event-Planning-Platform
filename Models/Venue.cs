@@ -16,5 +16,7 @@ namespace Event_Planning_Platform.Models
 
         [JsonIgnore]
         public List<Event> Events { get; set; } = new();
+
+        public string? CreatedBy { get; set; }
     }
 }

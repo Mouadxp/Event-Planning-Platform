@@ -12,13 +12,13 @@
 
 .modal {
   position: relative;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 14px;
   padding: 36px 32px 28px;
   width: 100%;
   max-width: 460px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   @media (max-width: 480px) {
     padding: 28px 20px 22px;

@@ -6,5 +6,6 @@ namespace Event_Planning_Platform.Models.Dtos
         public string Name { get; set; } = string.Empty;
         public string? Address { get; set; }
         public int Capacity { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

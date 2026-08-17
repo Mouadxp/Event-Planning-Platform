@@ -33,6 +33,7 @@ export const api = {
   getEvents: () => request('/events'),
   getEvent: (id) => request(`/events/${id}`),
   createEvent: (data) => request('/events', { method: 'POST', body: JSON.stringify(data) }),
+  updateEvent: (id, data) => request(`/events/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteEvent: (id) => request(`/events/${id}`, { method: 'DELETE' }),
 
   // Event categories
@@ -43,7 +44,10 @@ export const api = {
 
   // Venues
   getVenues: () => request('/venues'),
+  getVenue: (id) => request(`/venues/${id}`),
   createVenue: (data) => request('/venues', { method: 'POST', body: JSON.stringify(data) }),
+  updateVenue: (id, data) => request(`/venues/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteVenue: (id) => request(`/venues/${id}`, { method: 'DELETE' }),
 
   // Attendees / RSVP
   getAttendees: () => request('/attendees'),

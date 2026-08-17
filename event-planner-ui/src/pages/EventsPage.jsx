@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { api } from '../api/client'
 import { useAuth } from '../components/AuthProvider'
 import RsvpModal from '../components/RsvpModal'
@@ -13,6 +14,7 @@ function formatDate(iso) {
 }
 
 export default function EventsPage() {
+  const navigate = useNavigate()
   const { user } = useAuth()
   const [events, setEvents] = useState([])
   const [attendees, setAttendees] = useState([])
@@ -20,7 +22,7 @@ export default function EventsPage() {
   const [error, setError] = useState('')
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [deletingEventId, setDeletingEventId] = useState(null)
-  const [categoryFilter, setCategoryFilter] = useState([])
+  const [categoryFilter, setCategoryFilter] = useState('')
   const [categories, setCategories] = useState([])
 
   const loadCategories = useCallback(async () => {
@@ -65,6 +67,11 @@ export default function EventsPage() {
     )
   }
 
+  // Check if user can edit/delete event (admin or creator)
+  function canEditEvent(event) {
+    return user?.isAdmin || event.createdBy === user?.email
+  }
+
   function rsvpLabel(eventId) {
     const rsvp = myRsvp(eventId)
     if (!rsvp) return null
@@ -92,22 +99,11 @@ export default function EventsPage() {
 
   return (
     <div className="events-page">
-      <div style={{display: "flex", justifyContent: "flex-end"}}>
-        <label className="events-filter-label" style={{marginRight: "10px"}}>Filter by category: </label>
-      <select className="events-filter" onChange={(e) => setCategoryFilter(e.target.value.split())}>
-          {
-            categories
-              .sort()
-              .map((c) => <option key={c.name}>{c.name}</option>)}
-        </select>
-        </div>
       <div className="events-header">
         <div>
           <h1 className="events-title">Upcoming Events</h1>
           <p className="events-subtitle">Browse events and let us know if you&apos;ll be there.</p>
         </div>
-        
-
       </div>
 
       {loading && <div className="events-state">Loading events…</div>}
@@ -118,8 +114,22 @@ export default function EventsPage() {
       )}
 
       {!loading && !error && events.length > 0 && (
-        <ul className="events-grid">
-          {events.filter((e) => !categoryFilter.length || categoryFilter == (e.category)).map((event) => {
+        <>
+          <div className="events-filter-section">
+            <label className="events-filter-label" htmlFor="category-filter">Filter by category:</label>
+            <select
+              id="category-filter"
+              className="events-filter-select"
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="">All categories</option>
+              {categories
+                .sort()
+                .map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
+            </select>
+          </div>
+          <ul className="events-grid">
+          {events.filter((e) => !categoryFilter || categoryFilter === e.category).map((event) => {
             const label = rsvpLabel(event.id)
             return (
               <li key={event.id} className="event-card">
@@ -159,15 +169,24 @@ export default function EventsPage() {
                       {label}
                     </span>
                   )}
-                  {user?.isAdmin && (
-                    <button
-                      type="button"
-                      className="event-delete-btn"
-                      onClick={() => handleDeleteEvent(event.id, event.title)}
-                      disabled={deletingEventId === event.id}
-                    >
-                      {deletingEventId === event.id ? 'Deleting…' : 'Delete'}
-                    </button>
+                  {canEditEvent(event) && (
+                    <>
+                      <button
+                        type="button"
+                        className="event-edit-btn"
+                        onClick={() => navigate(`/events/${event.id}/edit`)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="event-delete-btn"
+                        onClick={() => handleDeleteEvent(event.id, event.title)}
+                        disabled={deletingEventId === event.id}
+                      >
+                        {deletingEventId === event.id ? 'Deleting…' : 'Delete'}
+                      </button>
+                    </>
                   )}
                   <button
                     type="button"
@@ -181,6 +200,7 @@ export default function EventsPage() {
             )
           })}
         </ul>
+        </>
       )}
 
       {selectedEvent && (
